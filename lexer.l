@@ -1,22 +1,17 @@
 %{
-    // C/C++ code (headers, includes)
-    #include <stdio.h>
-    #include "y.tab.h"   // needed later when using Bison
+#include "parser.tab.h"
+#include <stdlib.h>
+#include <string.h>
 %}
 
-%%
-[0-9]+          { return NUMBER; }        // integers
-"let"           { return LET; }           // keyword
-"print"         { return PRINT; }
-[a-zA-Z_][a-zA-Z0-9_]*  { return ID; }    // variable names
-"="             { return ASSIGN; }
-"+"             { return PLUS; }
-"-"             { return MINUS; }
-"*"             { return MUL; }
-"/"             { return DIV; }
-";"             { return SEMICOLON; }
-[ \t\n]         { /* ignore whitespace */ }
-.               { printf("Unknown char: %s\n", yytext); }
-%%
+%option noyywrap
 
-int yywrap() { return 1; }
+%%
+"let"           { return LET; }
+"="             { return ASSIGN; }
+";"             { return SEMICOLON; }
+[0-9]+          { yylval.num = atoi(yytext); return NUMBER; }
+[a-zA-Z_][a-zA-Z0-9_]*  { yylval.id = strdup(yytext); return ID; }
+[ \t\n]+        ;
+.               { return yytext[0]; }
+%%
