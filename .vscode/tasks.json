@@ -1,0 +1,16 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build TinyLang",
+            "type": "shell",
+            "command": "win_bison -d parser.y && win_flex lexer.l && g++ main.cpp parser.tab.c lex.yy.c -o tinylang.exe",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": ["$gcc"],
+            "detail": "Compile TinyLang with Bison, Flex, and GCC"
+        }
+    ]
+}
