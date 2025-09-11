@@ -6,12 +6,39 @@
 
 %option noyywrap
 
+DIGIT   [0-9]
+INT     {DIGIT}+
+ID      [A-Za-z_][A-Za-z0-9_]*
+
 %%
-"let"           { return LET; }
+
+"else if"       { return ELSEIF; }
+"if"            { return IF; }
+"else"          { return ELSE; }
+"while"         { return WHILE; }
+"for"           { return FOR; }
+
+"=="            { return EQ; }
+"!="            { return NEQ; }
+">="            { return GE; }
+"<="            { return LE; }
+">"             { return GT; }
+"<"             { return LT; }
 "="             { return ASSIGN; }
+"+"             { return PLUS; }
+"-"             { return MINUS; }
+"*"             { return MUL; }
+"/"             { return DIV; }
+
+"("             { return LPAREN; }
+")"             { return RPAREN; }
+"{"             { return LBRACE; }
+"}"             { return RBRACE; }
 ";"             { return SEMICOLON; }
-[0-9]+          { yylval.num = atoi(yytext); return NUMBER; }
-[a-zA-Z_][a-zA-Z0-9_]*  { yylval.id = strdup(yytext); return ID; }
-[ \t\n]+        ;
-.               { return yytext[0]; }
+
+{INT}           { yylval.ival = atoi(yytext); return NUMBER; }
+{ID}            { yylval.sval = strdup(yytext); return IDENTIFIER; }
+
+[ \t\n]+        { /* skip */ }
+.               { return UNKNOWN; }
 %%
