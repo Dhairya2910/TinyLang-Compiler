@@ -5,83 +5,105 @@
 
 void yyerror(const char *s);
 int yylex(void);
-
 %}
 
-/* Tokens */
-%token IF ELSE WHILE FOR ELSEIF
-%token EQ NEQ GE LE GT LT
-%token ASSIGN PLUS MINUS MUL DIV
-%token LPAREN RPAREN LBRACE RBRACE SEMICOLON
-%token UNKNOWN
-
-/* These tokens carry values */
-%token <ival> NUMBER
-%token <sval> IDENTIFIER
-
-/* Define semantic value types */
 %union {
-    int ival;      /* for numbers */
-    char *sval;    /* for identifiers */
+    int ival;
+    char cval;
+    char* sval;
 }
 
-/* Precedence rules */
+/* Tokens */
+%token FOR WHILE PRINT SCAN TRUE FALSE
+%token IDENT NUMBER STRING CHAR
+%token PLUS MINUS MUL DIV
+%token ASSIGN EQ NEQ LT GT LE GE
+%token SEMI LPAREN RPAREN LBRACE RBRACE
+
+/* Add these tokens */
+%token IF ELSE ELSEIF
+
 %left PLUS MINUS
 %left MUL DIV
-%left EQ NEQ GT LT GE LE
+%left LT GT LE GE EQ NEQ
+
+%type <ival> NUMBER
+%type <cval> CHAR
+%type <sval> IDENT STRING
+%start program
 
 %%
 
-program
-    : program statement
-    | /* empty */
+program:
+      statement_list
     ;
 
-statement
-    : expr SEMICOLON
-    | assignment SEMICOLON
-    | if_stmt
-    | while_stmt
-    | for_stmt
-    | block
+statement_list:
+      /* empty */
+    | statement_list statement
     ;
 
-assignment
-    : IDENTIFIER ASSIGN expr
+statement:
+      assignment SEMI
+    | printStmt SEMI
+    | scanStmt SEMI
+    | forStmt
+    | whileStmt
+    | ifStmt              /* Add a rule for if statements */
     ;
 
-expr
-    : expr PLUS expr
+assignment:
+      IDENT ASSIGN expr
+    ;
+
+printStmt:
+      PRINT LPAREN expr RPAREN
+    ;
+
+scanStmt:
+      SCAN LPAREN IDENT RPAREN
+    ;
+
+forStmt:
+      FOR LPAREN assignment SEMI expr SEMI assignment RPAREN block
+    ;
+
+whileStmt:
+      WHILE LPAREN expr RPAREN block
+    ;
+
+ifStmt:
+    IF LPAREN expr RPAREN block opt_else
+    ;
+
+opt_else:
+    /* empty */
+    | ELSE block
+    | ELSEIF LPAREN expr RPAREN block opt_else /* Handle `else if` */
+    ;
+
+block:
+      LBRACE statement_list RBRACE
+    ;
+
+expr:
+      expr PLUS expr
     | expr MINUS expr
     | expr MUL expr
     | expr DIV expr
+    | expr GE expr
+    | expr GT expr
+    | expr LE expr
+    | expr LT expr
     | expr EQ expr
     | expr NEQ expr
-    | expr GT expr
-    | expr LT expr
-    | expr GE expr
-    | expr LE expr
     | LPAREN expr RPAREN
+    | IDENT
     | NUMBER
-    | IDENTIFIER
-    ;
-
-if_stmt
-    : IF LPAREN expr RPAREN statement
-    | IF LPAREN expr RPAREN statement ELSE statement
-    | IF LPAREN expr RPAREN statement ELSEIF statement
-    ;
-
-while_stmt
-    : WHILE LPAREN expr RPAREN statement
-    ;
-
-for_stmt
-    : FOR LPAREN assignment SEMICOLON expr SEMICOLON assignment RPAREN statement
-    ;
-
-block
-    : LBRACE program RBRACE
+    | STRING
+    | CHAR
+    | TRUE
+    | FALSE
     ;
 
 %%
