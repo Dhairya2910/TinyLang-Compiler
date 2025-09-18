@@ -1,15 +1,21 @@
 %{
 #include "parser.tab.h"
+#include <string.h>
+#include <stdlib.h>
 %}
 
-digit      [0-9]
-letter     [a-zA-Z]
-ident      {letter}({letter}|{digit}|_)*
-string     \"([^\"\n])*\"
-char       \'[a-zA-Z]\'
+digit     [0-9]
+letter    [a-zA-Z]
+ident     {letter}({letter}|{digit}|_)*
+string    \"([^\"\n])*\"
+char      \'[a-zA-Z]\'
 
 %%
 
+"int"           { return INT; }
+"float"         { return FLOAT; }
+"char"          { return CHAR; }
+"bool"          { return BOOL; }
 "for"           { return FOR; }
 "while"         { return WHILE; }
 "print"         { return PRINT; }
@@ -20,11 +26,10 @@ char       \'[a-zA-Z]\'
 "else if"       { return ELSEIF; }
 "else"          { return ELSE; }
 
-
 {ident}         { yylval.sval = strdup(yytext); return IDENT; }
-{digit}+        { yylval.ival = atoi(yytext); return NUMBER; }
+{digit}+        { yylval.sval = strdup(yytext); return NUMBER; }
 {string}        { yylval.sval = strdup(yytext); return STRING; }
-{char}          { yylval.cval = yytext[1]; return CHAR; }
+{char}          { yylval.sval = strdup(yytext); return CHAR_LITERAL; }
 
 "=="            { return EQ; }
 "!="            { return NEQ; }
@@ -45,7 +50,7 @@ char       \'[a-zA-Z]\'
 "{"             { return LBRACE; }
 "}"             { return RBRACE; }
 
-[ \t\r\n]+      ;  
+[ \t\r\n]+      ;
 
 .               { printf("Unknown char: %s\n", yytext); }
 

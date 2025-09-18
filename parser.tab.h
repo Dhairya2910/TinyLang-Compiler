@@ -60,29 +60,33 @@ extern int yydebug;
     SCAN = 261,                    /* SCAN  */
     TRUE = 262,                    /* TRUE  */
     FALSE = 263,                   /* FALSE  */
-    IDENT = 264,                   /* IDENT  */
-    NUMBER = 265,                  /* NUMBER  */
-    STRING = 266,                  /* STRING  */
-    CHAR = 267,                    /* CHAR  */
-    PLUS = 268,                    /* PLUS  */
-    MINUS = 269,                   /* MINUS  */
-    MUL = 270,                     /* MUL  */
-    DIV = 271,                     /* DIV  */
-    ASSIGN = 272,                  /* ASSIGN  */
-    EQ = 273,                      /* EQ  */
-    NEQ = 274,                     /* NEQ  */
-    LT = 275,                      /* LT  */
-    GT = 276,                      /* GT  */
-    LE = 277,                      /* LE  */
-    GE = 278,                      /* GE  */
-    SEMI = 279,                    /* SEMI  */
-    LPAREN = 280,                  /* LPAREN  */
-    RPAREN = 281,                  /* RPAREN  */
-    LBRACE = 282,                  /* LBRACE  */
-    RBRACE = 283,                  /* RBRACE  */
-    IF = 284,                      /* IF  */
-    ELSE = 285,                    /* ELSE  */
-    ELSEIF = 286                   /* ELSEIF  */
+    PLUS = 264,                    /* PLUS  */
+    MINUS = 265,                   /* MINUS  */
+    MUL = 266,                     /* MUL  */
+    DIV = 267,                     /* DIV  */
+    ASSIGN = 268,                  /* ASSIGN  */
+    EQ = 269,                      /* EQ  */
+    NEQ = 270,                     /* NEQ  */
+    LT = 271,                      /* LT  */
+    GT = 272,                      /* GT  */
+    LE = 273,                      /* LE  */
+    GE = 274,                      /* GE  */
+    SEMI = 275,                    /* SEMI  */
+    LPAREN = 276,                  /* LPAREN  */
+    RPAREN = 277,                  /* RPAREN  */
+    LBRACE = 278,                  /* LBRACE  */
+    RBRACE = 279,                  /* RBRACE  */
+    IF = 280,                      /* IF  */
+    ELSE = 281,                    /* ELSE  */
+    ELSEIF = 282,                  /* ELSEIF  */
+    INT = 283,                     /* INT  */
+    FLOAT = 284,                   /* FLOAT  */
+    BOOL = 285,                    /* BOOL  */
+    CHAR = 286,                    /* CHAR  */
+    IDENT = 287,                   /* IDENT  */
+    NUMBER = 288,                  /* NUMBER  */
+    STRING = 289,                  /* STRING  */
+    CHAR_LITERAL = 290             /* CHAR_LITERAL  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -91,13 +95,11 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 10 "parser.y"
+#line 32 "parser.y"
 
-    int ival;
-    char cval;
     char* sval;
 
-#line 101 "parser.tab.h"
+#line 103 "parser.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
