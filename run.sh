@@ -16,5 +16,7 @@ echo "Generating the C program"
 
 echo "Running the program..."
 gcc output.c -o output
+
+echo "Output :"
 ./output
 
